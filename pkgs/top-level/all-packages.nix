@@ -2042,10 +2042,6 @@ with pkgs;
     mozc = mozc.override { withIbus = true; };
     mozc-ut = mozc-ut.override { withIbus = true; };
 
-    openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
-      withIbusSupport = true;
-    };
-
     pinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-pinyin { };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
@@ -2225,7 +2221,7 @@ with pkgs;
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
 
   emscripten = callPackage ../development/compilers/emscripten {
-    llvmPackages = llvmPackages_21;
+    llvmPackages = llvmPackages_22;
   };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
@@ -2275,10 +2271,6 @@ with pkgs;
   fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { lua = lua5_3; };
 
   fcitx5-m17n = callPackage ../tools/inputmethods/fcitx5/fcitx5-m17n.nix { };
-
-  fcitx5-openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
-    withFcitx5Support = true;
-  };
 
   fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix { };
 
@@ -3136,12 +3128,10 @@ with pkgs;
   patchutils_0_4_2 = callPackage ../tools/text/patchutils/0.4.2.nix { };
 
   inherit (import ../servers/sql/percona-server pkgs)
-    percona-server_8_0
     percona-server_8_4
     percona-server
     ;
   inherit (import ../tools/backup/percona-xtrabackup pkgs)
-    percona-xtrabackup_8_0
     percona-xtrabackup_8_4
     percona-xtrabackup
     ;
@@ -6109,7 +6099,6 @@ with pkgs;
       callPackage ../os-specific/linux/bionic-prebuilt { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost177
     boost178
     boost179
     boost180
@@ -6532,7 +6521,6 @@ with pkgs;
     icu64
     icu66
     icu67
-    icu69
     icu70
     icu71
     icu72
@@ -6760,10 +6748,6 @@ with pkgs;
     })
     libprom
     ;
-
-  libpulsar = callPackage ../development/libraries/libpulsar {
-    protobuf = protobuf_21;
-  };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
@@ -7132,6 +7116,7 @@ with pkgs;
     openssl_3
     openssl_3_5
     openssl_3_6
+    openssl_4_0
     ;
 
   pcre = callPackage ../development/libraries/pcre { };
@@ -7584,25 +7569,28 @@ with pkgs;
       zig_0_13 = zigPackages."0.13";
       zig_0_14 = zigPackages."0.14";
       zig_0_15 = zigPackages."0.15";
+      zig_0_16 = zigPackages."0.16";
     })
     zigPackages
     zig_0_13
     zig_0_14
     zig_0_15
+    zig_0_16
     ;
 
   # If this is updated, the default zls version should also be updated to match the default zig version.
-  zig = zig_0_15;
+  zig = zig_0_16;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
 
   inherit (callPackages ../development/tools/zls { })
     zls_0_14
     zls_0_15
+    zls_0_16
     ;
 
   # This should be kept updated to ensure the default zls version matches the default zig version.
-  zls = zls_0_15;
+  zls = zls_0_16;
 
   libzint = zint-qt.override { withGUI = false; };
 
@@ -10894,14 +10882,6 @@ with pkgs;
 
   zed-editor-fhs = zed-editor.fhs;
 
-  zgv = callPackage ../applications/graphics/zgv {
-    # Enable the below line for terminal display. Note
-    # that it requires sixel graphics compatible terminals like mlterm
-    # or xterm -ti 340
-    SDL = SDL_sixel;
-    SDL_image = SDL_image.override { SDL = SDL_sixel; };
-  };
-
   zynaddsubfx-fltk = zynaddsubfx.override {
     guiModule = "fltk";
   };
@@ -11489,10 +11469,7 @@ with pkgs;
     lapack = lapack-ilp64;
   };
 
-  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
-    inherit (llvmPackages) openmp;
-  };
-  suitesparse = suitesparse_5_3;
+  suitesparse = callPackage ../development/libraries/science/math/suitesparse { };
 
   trilinos-mpi = trilinos.override { withMPI = true; };
 
